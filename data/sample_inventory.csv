@@ -1,0 +1,11 @@
+product_name,category,quantity,unit,expiry_date,purchase_date,avg_daily_sales,cost_per_unit,storage_condition,demand_level,weather_factor,event_factor
+Yogurt Cups,Dairy,120,cups,2026-05-26,2026-05-19,18,0.80,cold,low,hot,none
+Fruit Juice Bottles,Beverage,300,bottles,2026-06-03,2026-05-12,22,1.20,ambient,medium,normal,negative
+Banana Packs,Fruit,90,packs,2026-05-25,2026-05-22,30,0.50,ambient,medium,hot,none
+Sandwich Packets,Prepared Food,75,packets,2026-05-25,2026-05-24,12,1.50,cold,low,rain,low_footfall
+Cooked Restaurant Meals,Restaurant Meals,65,meals,2026-05-25,2026-05-24,20,2.40,cold,low,storm,cancellation
+Packaged Snacks,Packaged Snacks,500,packs,2026-08-22,2026-05-04,35,0.60,ambient,medium,normal,none
+Plastic Water Bottles,Plastic Beverage,900,bottles,2026-11-20,2026-04-24,25,0.35,ambient,low,rain,none
+Raw Vegetables,Vegetables,150,kg,2026-05-28,2026-05-22,40,0.90,cold,high,normal,market_day
+Milk Packets,Dairy,200,packets,2026-05-27,2026-05-23,70,0.70,cold,high,hot,none
+Bakery Bread,Bakery,160,loaves,2026-05-26,2026-05-23,45,1.10,ambient,medium,humid,none
