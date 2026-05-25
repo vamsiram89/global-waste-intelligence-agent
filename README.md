@@ -1,1 +1,0 @@
-# global-waste-intelligence-agent
