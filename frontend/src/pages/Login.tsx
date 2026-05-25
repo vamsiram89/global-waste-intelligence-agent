@@ -54,6 +54,18 @@ export default function Login() {
             </div>
             <h2 className="max-w-lg text-6xl font-black tracking-normal">Safety-first food intelligence.</h2>
             <p className="mt-6 max-w-md text-lg leading-8 text-blue-100">Built for restaurants, supermarkets, warehouses, delivery apps, NGOs, and recycling partners.</p>
+            <div className="mt-8 grid max-w-xl grid-cols-[1.1fr_0.9fr] gap-4">
+              <img
+                className="h-48 w-full rounded-2xl object-cover shadow-soft"
+                src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=900&q=80"
+                alt="Fresh produce prepared for food safety inspection"
+              />
+              <img
+                className="mt-10 h-40 w-full rounded-2xl object-cover shadow-soft"
+                src="https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=700&q=80"
+                alt="Organized grocery shelf inventory"
+              />
+            </div>
           </div>
           <div className="grid grid-cols-3 gap-4">
             {["Expiry risk", "Human approval", "Partner matching"].map((item) => (

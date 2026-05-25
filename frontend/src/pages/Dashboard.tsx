@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { AlertTriangle, Building2, ClipboardList, PackageX, ShieldCheck } from "lucide-react";
+import { AlertTriangle, Building2, ClipboardList, PackageX, RefreshCw, ShieldCheck } from "lucide-react";
 import { getFriendlyApiError, getHealth } from "../api/apiClient";
 import { getAnalyticsSummary, type AnalyticsSummary } from "../api/analyticsApi";
 import { getInventory, type InventoryItem } from "../api/inventoryApi";
@@ -23,23 +23,28 @@ export default function Dashboard() {
   const load = async () => {
     setLoading(true);
     setError("");
-    try {
-      const [healthData, inventoryData, predictionData, analyticsData] = await Promise.all([
-        getHealth(),
-        getInventory(),
-        predictAllWasteRisk(),
-        getAnalyticsSummary(),
-      ]);
-      setHealth(healthData.status === "ok" ? "Online" : "Degraded");
-      setInventory(inventoryData);
-      setPredictions(predictionData);
-      setAnalytics(analyticsData);
-    } catch (err) {
+    const [healthResult, inventoryResult, predictionResult, analyticsResult] = await Promise.allSettled([
+      getHealth(),
+      getInventory(),
+      predictAllWasteRisk(),
+      getAnalyticsSummary(),
+    ]);
+
+    if (healthResult.status === "fulfilled") {
+      setHealth(healthResult.value.status === "ok" ? "Online" : "Degraded");
+    } else {
       setHealth("Offline");
-      setError(getFriendlyApiError(err).message);
-    } finally {
-      setLoading(false);
     }
+
+    setInventory(inventoryResult.status === "fulfilled" ? inventoryResult.value : []);
+    setPredictions(predictionResult.status === "fulfilled" ? predictionResult.value : []);
+    setAnalytics(analyticsResult.status === "fulfilled" ? analyticsResult.value : null);
+
+    const failed = [healthResult, inventoryResult, predictionResult, analyticsResult].find((result) => result.status === "rejected");
+    if (failed?.status === "rejected") {
+      setError(getFriendlyApiError(failed.reason).message);
+    }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -88,9 +93,14 @@ export default function Dashboard() {
             <RiskBadge level={health === "Online" ? "Safe" : "Critical"} />
           </div>
           <div className="mt-6 rounded-2xl bg-slate-50 p-5">
-            <ShieldCheck className="h-8 w-8 text-leaf" />
+            <div className="flex items-start justify-between gap-4">
+              <ShieldCheck className="h-8 w-8 text-leaf" />
+              <button className="btn-secondary px-3 py-2" onClick={load} aria-label="Refresh health status">
+                <RefreshCw className="h-4 w-4" />
+              </button>
+            </div>
             <p className="mt-4 text-3xl font-black text-ink">{health}</p>
-            <p className="mt-2 text-sm text-slate-500">Health check: http://localhost:8000/health</p>
+            <p className="mt-2 break-all text-sm text-slate-500">Health check: http://localhost:8000/health</p>
           </div>
         </GlassCard>
       </div>

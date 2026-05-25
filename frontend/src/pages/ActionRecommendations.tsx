@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Sparkles } from "lucide-react";
+import { ShieldAlert, Sparkles } from "lucide-react";
 import { recommendAction, type Recommendation } from "../api/actionApi";
 import { getFriendlyApiError } from "../api/apiClient";
 import { getInventory, type InventoryItem } from "../api/inventoryApi";
@@ -41,15 +41,24 @@ export default function ActionRecommendations() {
         <p className="font-semibold text-leaf">Smart prevention actions</p>
         <h1 className="text-3xl font-black tracking-normal text-ink">Action Recommendations</h1>
       </div>
+      <div className="flex items-start gap-3 rounded-2xl border border-blue-100 bg-blue-50 p-4 text-sm leading-6 text-blue-800">
+        <ShieldAlert className="mt-0.5 h-5 w-5 flex-none" />
+        <p>This MVP is a decision-support prototype. Real deployment must include food safety validation, local legal compliance, cold-chain checks, expiry verification, partner approval, and human confirmation before redistribution or pickup.</p>
+      </div>
       {error ? <ErrorMessage message={error} /> : null}
       <div className="grid gap-6 xl:grid-cols-[0.75fr_1.25fr]">
         <GlassCard className="p-6">
           <h2 className="text-xl font-black text-ink">Generate Recommendation</h2>
           <div className="mt-5">
             <label className="label">Inventory item</label>
-            <select className="field" value={selectedId} onChange={(event) => setSelectedId(Number(event.target.value))}>
-              {items.map((item) => <option key={item.id} value={item.id}>{item.product_name} - {item.quantity} {item.unit}</option>)}
-            </select>
+            {items.length ? (
+              <select className="field" value={selectedId} onChange={(event) => setSelectedId(Number(event.target.value))}>
+                {items.map((item) => <option key={item.id} value={item.id}>{item.product_name} - {item.quantity} {item.unit}</option>)}
+              </select>
+            ) : (
+              <input className="field" type="number" placeholder="Enter inventory item ID" value={selectedId} onChange={(event) => setSelectedId(event.target.value ? Number(event.target.value) : "")} />
+            )}
+            {!items.length ? <p className="mt-2 text-xs text-slate-500">No inventory list loaded. You can enter a known item ID from the API.</p> : null}
           </div>
           <button className="btn-primary mt-5 w-full" disabled={!selectedId || loading} onClick={generate}><Sparkles className="h-4 w-4" /> {loading ? "Generating..." : "Generate recommendation"}</button>
           <div className="mt-6 grid gap-3">
